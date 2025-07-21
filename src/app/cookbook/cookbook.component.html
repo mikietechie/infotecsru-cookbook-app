@@ -1,0 +1,42 @@
+<mat-toolbar class="fixed-top" color="primary">
+  <span>Cookbook App</span>
+  <span style="flex: 1 1 auto"></span>
+  <mat-label>{{ ss.user!.email }}</mat-label>
+  <button mat-button (click)="openRecipeFormDialog()">
+    <mat-icon>add</mat-icon> Add
+  </button>
+  <button mat-icon-button (click)="ss.setUser()">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+<div class="container mt-5 py-5">
+  <div class="row">
+    <div class="col-12">
+      <mat-list>
+        <div mat-subheader>Avalilable Recipes</div>
+        <mat-list-item *ngFor="let recipe of ss.recipes">
+          <img
+            matListItemAvatar
+            [src]="recipe.image || recipe.name"
+            alt="..."
+          />
+          <h3 (click)="openRecipeDialog(recipe)" matListItemTitle>
+            {{ recipe.name }}
+          </h3>
+          <p matListItemLine>
+            <span>{{ recipe.createdOn }}</span>
+            <!-- <span class="demo-2"> -- {{ recipe.content }}</span> -->
+          </p>
+          <div matListItemMeta *ngIf="recipe.userId === ss.user!.id">
+            <button mat-icon-button (click)="openRecipeFormDialog(recipe)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="openRecipeDeleteDialog(recipe)">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Delete Recipe</h1>
+<div mat-dialog-content>
+  <p>
+    Are you sure you want to delete <strong>{{ data.recipe.name }}</strong
+    >?
+  </p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="dialogRef.close()">
+    <mat-icon>close</mat-icon> Cancel
+  </button>
+  <button mat-button color="warn" (click)="confirmDelete()">
+    <mat-icon>delete_forever</mat-icon> Delete
+  </button>
+</div>
