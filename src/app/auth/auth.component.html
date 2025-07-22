@@ -7,12 +7,14 @@
     <form [formGroup]="form" (submit)="onSubmit()">
       <div class="mb-3">
         <mat-form-field class="w-100" appearance="fill">
-          <mat-label>Email</mat-label>
+          <mat-label for="email">Email</mat-label>
           <input
             type="email"
             matInput
             placeholder="vlad@mail.com"
             formControlName="email"
+            required=""
+            id="email"
           />
           <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
           <mat-hint>Hint</mat-hint> -->
@@ -20,12 +22,14 @@
       </div>
       <div class="mb-3">
         <mat-form-field class="w-100" appearance="fill">
-          <mat-label>Password</mat-label>
+          <mat-label for="password">Password</mat-label>
           <input
             type="password"
             matInput
             placeholder="********"
             formControlName="password"
+            required=""
+            id="password"
           />
           <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
           <mat-hint>Hint</mat-hint> -->

@@ -1,7 +1,7 @@
 <mat-toolbar class="fixed-top" color="primary">
   <span>Cookbook App</span>
   <span style="flex: 1 1 auto"></span>
-  <mat-label>{{ ss.user!.email }}</mat-label>
+  <mat-label>{{ ss.user!.email! | username}}</mat-label>
   <button mat-button (click)="openRecipeFormDialog()">
     <mat-icon>add</mat-icon> Add
   </button>
