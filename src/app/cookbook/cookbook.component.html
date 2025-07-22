@@ -14,7 +14,7 @@
     <div class="col-12">
       <mat-list>
         <div mat-subheader>Avalilable Recipes</div>
-        <mat-list-item *ngFor="let recipe of ss.recipes">
+        <mat-list-item *ngFor="let recipe of ss.recipes$ | async">
           <img
             matListItemAvatar
             [src]="recipe.image || recipe.name"
@@ -27,7 +27,7 @@
             <span>{{ recipe.createdOn }}</span>
             <!-- <span class="demo-2"> -- {{ recipe.content }}</span> -->
           </p>
-          <div matListItemMeta *ngIf="recipe.userId === ss.user!.id">
+          <div matListItemMeta *ngIf="recipe.userId === ss.user!.uid">
             <button mat-icon-button (click)="openRecipeFormDialog(recipe)">
               <mat-icon>edit</mat-icon>
             </button>

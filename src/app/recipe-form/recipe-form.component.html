@@ -59,7 +59,7 @@
             />
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option
-                *ngFor="let option of ss.ingredients"
+                *ngFor="let option of ss.ingredients$ | async"
                 [value]="option.name"
               >
                 {{ option.name }}
@@ -82,7 +82,7 @@
             <mat-label>Unit</mat-label>
             <mat-select formControlName="measurementUnit">
               <mat-option
-                *ngFor="let measurementUnit of ss.measurementUnits"
+                *ngFor="let measurementUnit of ss.measurementUnits$ | async"
                 [value]="measurementUnit.name"
                 >{{ measurementUnit.name }}</mat-option
               >

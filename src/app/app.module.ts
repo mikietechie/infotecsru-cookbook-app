@@ -13,8 +13,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { NgFor } from '@angular/common';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AsyncPipe, NgFor } from '@angular/common';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuthComponent } from './auth/auth.component';
 import { CookbookComponent } from './cookbook/cookbook.component';
@@ -24,6 +24,10 @@ import { RecipeComponent } from './recipe/recipe.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RecipeDeleteComponent } from './recipe-delete/recipe-delete.component';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getDatabase, provideDatabase } from '@angular/fire/database';
 
 @NgModule({
   declarations: [
@@ -51,7 +55,22 @@ import { RecipeDeleteComponent } from './recipe-delete/recipe-delete.component';
     MatDialogModule,
     MatAutocompleteModule,
     NgFor,
+    AsyncPipe,
     MatSnackBarModule,
+    provideFirebaseApp(() =>
+      initializeApp({
+        projectId: 'tgcicd',
+        appId: '1:8756139626:web:086b507dd3945d8d54dc13',
+        storageBucket: 'tgcicd.firebasestorage.app',
+        apiKey: 'AIzaSyB924KaF3mAL8vd3GsNf9gI36pdq9wsi2I',
+        authDomain: 'tgcicd.firebaseapp.com',
+        messagingSenderId: '8756139626',
+        measurementId: 'G-79599KPV02',
+      })
+    ),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    provideDatabase(() => getDatabase()),
   ],
   providers: [],
   bootstrap: [AppComponent],

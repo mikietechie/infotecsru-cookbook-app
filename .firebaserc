@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "tgcicd": {
+      "hosting": {
+        "frontend-app": [
+          "tgcicd"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "tgcicd"
+  }
+}

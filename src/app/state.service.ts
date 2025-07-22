@@ -1,34 +1,43 @@
 import { Injectable } from '@angular/core';
+import { IIngredient, IRecipe, IRecipeIngredient, IUser } from './structs';
 import {
-  IIngredient,
-  IMeasurementUnit,
-  IRecipe,
-  IRecipeIngredient,
-  IUser,
-} from './structs';
+  collection,
+  collectionData,
+  deleteDoc,
+  doc,
+  Firestore,
+  setDoc,
+} from '@angular/fire/firestore';
+import { measurementUnits } from './data';
+import { of } from 'rxjs';
+import { Auth, User } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StateService {
-  public user: IUser | undefined = { id: '00', email: 'jon@mail.com' };
-  public recipes: IRecipe[] = [];
-  public ingredients: IIngredient[] = [];
-  public measurementUnits: IMeasurementUnit[] = [
-    { id: 'default', name: 'Sufficient' },
-    { id: 'tea spoon', name: 'tea spoon' },
-    { id: 'table spoon', name: 'table spoon' },
-    { id: 'cup', name: 'cup' },
-    { id: 'grams', name: 'grams' },
-    { id: 'ounces', name: 'ounces' },
-  ];
+  public user?: User;
+  // public user$?: Observable<IUser | undefined>;
+  // public recipes: IRecipe[] = [];
+  // public ingredients: IIngredient[] = [];
+  public measurementUnits = measurementUnits;
+  public measurementUnits$ = of(measurementUnits);
+  // public firestore = inject(Firestore);
+  public userCollectionRef = collection(this.firestore, 'users');
+  public users$ = collectionData<IUser>(this.userCollectionRef as any);
+  public recipeCollectionRef = collection(this.firestore, 'recipes');
+  public recipes$ = collectionData<IRecipe>(this.recipeCollectionRef as any);
+  public ingredientCollectionRef = collection(this.firestore, 'ingredients');
+  public ingredients$ = collectionData<IRecipe>(
+    this.ingredientCollectionRef as any
+  );
 
-  constructor() {}
+  constructor(private firestore: Firestore, public auth: Auth) {}
 
   /**
    * setUser
    */
-  public setUser(user?: IUser) {
+  public setUser(user?: User) {
     this.user = user;
   }
 
@@ -36,14 +45,7 @@ export class StateService {
    * addIngredient
    */
   public async addIngredient(ingredient: IIngredient) {
-    if (
-      this.ingredients
-        .map((ingredient) => ingredient.name)
-        .includes(ingredient.name)
-    ) {
-      return;
-    }
-    this.ingredients.push(ingredient);
+    await setDoc(doc(this.ingredientCollectionRef, ingredient.id), ingredient);
   }
 
   /**
@@ -51,7 +53,7 @@ export class StateService {
    */
   public async updateIngredients(recipe: IRecipe) {
     recipe.ingredients.forEach((i) =>
-      this.addIngredient({ id: this.getId('ING-'), name: i.ingredient })
+      this.addIngredient({ id: i.ingredient, name: i.ingredient })
     );
   }
 
@@ -61,9 +63,10 @@ export class StateService {
   public async addRecipe(recipe: IRecipe) {
     this.checkUser();
     recipe.id = this.getId('REC-');
-    recipe.userId = this.user!.id!;
+    recipe.userId = this.user!.uid!;
     recipe.createdOn = new Date().toISOString();
-    this.recipes.push(recipe);
+    // this.recipes.push(recipe);
+    await setDoc(doc(this.recipeCollectionRef, recipe.id), recipe);
     this.updateIngredients(recipe);
   }
 
@@ -72,17 +75,7 @@ export class StateService {
    */
   public async updateRecipe(recipe: IRecipe) {
     this.checkOwnership(recipe);
-    for (let index = 0; index < this.recipes.length; index++) {
-      const element = this.recipes[index];
-      if (element.id === recipe.id) {
-        element.name = recipe.name;
-        element.image = recipe.image;
-        element.ingredients = recipe.ingredients;
-        element.instructions = recipe.instructions;
-        this.recipes[index] = element;
-        break;
-      }
-    }
+    await setDoc(doc(this.recipeCollectionRef, recipe.id), recipe);
     this.updateIngredients(recipe);
   }
 
@@ -91,14 +84,14 @@ export class StateService {
    */
   public async deleteRecipe(recipe: IRecipe) {
     this.checkOwnership(recipe);
-    this.recipes = this.recipes.filter((recipe) => recipe.id !== recipe.id);
+    await deleteDoc(doc(this.recipeCollectionRef, recipe.id));
   }
 
   /**
    * findRecipe
    */
   public async findRecipe(id: string): Promise<IRecipe | undefined> {
-    return this.recipes.find((recipe) => recipe.id === id);
+    return undefined;
   }
 
   /**
@@ -114,7 +107,7 @@ export class StateService {
    * checkOwnership
    */
   public checkOwnership(recipe: IRecipe) {
-    if (recipe.userId !== this.user?.id) {
+    if (recipe.userId !== this.user?.uid) {
       throw new Error('authorized');
     }
   }
@@ -144,14 +137,14 @@ export class StateService {
               image: string;
             }[];
           }) => {
-            const userIds = data.recipes.map((recipe) => String(recipe.userId));
-            const ingredients = [
-              ...new Set(data.recipes.flatMap((recipe) => recipe.ingredients)),
-            ];
+            // const userIds = data.recipes.map((recipe) => String(recipe.userId));
+            // const ingredients = [
+            //   ...new Set(data.recipes.flatMap((recipe) => recipe.ingredients)),
+            // ];
             // userIds.forEach((userId) => console.log(`Create user ${userId}`));
-            ingredients.forEach((ingredient, index) =>
-              this.ingredients.push({ id: String(index + 1), name: ingredient })
-            );
+            // ingredients.forEach((ingredient, index) =>
+            //   this.ingredients.push({ id: String(index + 1), name: ingredient })
+            // );
             data.recipes.forEach((recipe, index) => {
               const recipeIngredients: IRecipeIngredient[] = [];
               recipe.ingredients.forEach((ingredient) => {
@@ -161,9 +154,8 @@ export class StateService {
                   quantity: 1,
                 });
               });
-              this.recipes.push({
-                userId:
-                  index % 5 === 0 ? this.user!.id! : String(recipe.userId),
+              this.addRecipe({
+                userId: 'system',
                 image: recipe.image,
                 instructions: recipe.instructions.join(' '),
                 name: recipe.name,

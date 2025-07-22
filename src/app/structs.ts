@@ -13,6 +13,8 @@ export interface IMeasurementUnit {
   name: string;
 }
 
+export type TCredentials = any;
+
 export interface IRecipeIngredient {
   ingredient: string;
   quantity: number;
