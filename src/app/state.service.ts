@@ -16,7 +16,7 @@ import { Auth, User } from '@angular/fire/auth';
   providedIn: 'root',
 })
 export class StateService {
-  public user?: User = { uid: '00', email: 'm@m.com' } as any;
+  public user?: User; // = { uid: '00', email: 'm@m.com' } as any;
   // public user$?: Observable<IUser | undefined>;
   // public recipes: IRecipe[] = [];
   // public ingredients: IIngredient[] = [];
