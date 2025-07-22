@@ -1,12 +1,12 @@
 <mat-toolbar class="fixed-top" color="primary">
   <span>Cookbook App</span>
   <span style="flex: 1 1 auto"></span>
-  <mat-label>{{ ss.user!.email! | username}}</mat-label>
-  <button mat-button (click)="openRecipeFormDialog()">
+  <!-- <mat-label>{{ ss.user!.email! | username}}</mat-label> -->
+  <button mat-stroked-button (click)="openRecipeFormDialog()">
     <mat-icon>add</mat-icon> Add
   </button>
-  <button mat-icon-button (click)="ss.setUser()">
-    <mat-icon>logout</mat-icon>
+  <button mat-flat-button (click)="ss.setUser()">
+    <mat-icon>logout</mat-icon> {{ ss.user!.email! | username}}
   </button>
 </mat-toolbar>
 <div class="container mt-5 py-5">
