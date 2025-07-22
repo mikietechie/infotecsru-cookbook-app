@@ -1,4 +1,30 @@
-# FrontendApp
+# Cookbook App
+
+An interview assignment for a junior Angular developer role. Completed in two days.
+
+## Requirements Specification
+
+This project involves building a Cookbook application using Angular 16 and Angular Material for UI components.
+
+Key Features:
+✅ CRUD Operations – Create, Read, Update, and Delete recipes.
+✅ Recipe Creation
+
+Name, cooking instructions, and optional image.
+
+Dynamic ingredient list (name, quantity, and selectable measurement units).
+✅ Recipe Editing – Modify existing recipes, including updating images.
+✅ Delete Confirmation – Prompt before removing a recipe.
+✅ Recipe List – Displays recipe names, creation dates, and thumbnails (if images exist).
+✅ Measurement Units – Predefined or customizable units for ingredients.
+
+Optional Enhancements:
+🔥 Firebase Integration – For data storage.
+🔐 User Authentication – Secure access control.
+
+This app provides a clean, interactive way to manage recipes with a modern Angular-based UI.
+
+## Tecnical details
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
 

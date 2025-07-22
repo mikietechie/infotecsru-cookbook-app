@@ -16,15 +16,19 @@
         <div mat-subheader>Avalilable Recipes</div>
         <mat-list-item *ngFor="let recipe of ss.recipes$ | async">
           <img
+            (click)="openRecipeDialog(recipe)"
             matListItemAvatar
-            [src]="recipe.image || recipe.name"
+            [src]="
+              recipe.image ||
+              'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
+            "
             alt="..."
           />
           <h3 (click)="openRecipeDialog(recipe)" matListItemTitle>
             {{ recipe.name }}
           </h3>
-          <p matListItemLine>
-            <span>{{ recipe.createdOn }}</span>
+          <p matListItemLine (click)="openRecipeDialog(recipe)">
+            <span>{{ recipe.createdOn | date }}</span>
             <!-- <span class="demo-2"> -- {{ recipe.content }}</span> -->
           </p>
           <div matListItemMeta *ngIf="recipe.userId === ss.user!.uid">

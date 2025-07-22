@@ -1,8 +1,35 @@
-<h1 mat-dialog-title>{{ data.recipe.name }}</h1>
+<h1 mat-dialog-title>{{ data.recipe.name | titlecase }}</h1>
 <div mat-dialog-content>
-    <div class="row">
-        
+  <div class="details">
+    <div class="mb-3">
+      <img
+        [src]="
+          data.recipe.image ||
+          'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
+        "
+        alt="Recipe image"
+      />
     </div>
+    <div class="mb-3">
+      <h3><strong>Recipe Instructions</strong></h3>
+      <p>{{ data.recipe.instructions }}</p>
+    </div>
+    <div class="mb-3">
+      <mat-list>
+        <div matSubheader><strong>Recipe Ingredients</strong></div>
+        <mat-list-item *ngFor="let i of data.recipe.ingredients">
+          <span matListItemTitle>{{ i.ingredient }}</span>
+          <span matListItemLine>{{ i.quantity }} {{ i.measurementUnit }}</span>
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div class="mb-3">
+      <p>
+        Posted On {{ data.recipe.createdOn | date }} By User -
+        {{ data.recipe.userId }}
+      </p>
+    </div>
+  </div>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="dialogRef.close()">Okay</button>

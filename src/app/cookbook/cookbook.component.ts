@@ -43,7 +43,7 @@ export class CookbookComponent implements OnInit {
    */
   public openRecipeDialog(recipe: IRecipe) {
     this.dialog.open(RecipeComponent, {
-      minWidth: '50%',
+      maxWidth: '500px',
       data: { recipe },
     });
   }
